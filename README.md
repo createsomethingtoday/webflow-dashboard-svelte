@@ -11,6 +11,8 @@ This repository was exported from `createsomethingtoday/create-something-monorep
 
 ## Local Development
 
+This project pins Node via `.node-version` and pnpm via `packageManager`.
+
 ```bash
 pnpm install
 pnpm check
