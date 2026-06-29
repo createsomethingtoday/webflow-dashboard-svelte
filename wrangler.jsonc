@@ -38,6 +38,7 @@
 	// Cron triggers: Configure in Cloudflare Dashboard > Workers & Pages > webflow-dashboard > Triggers
 	// Schedule: 0 0 * * * (midnight UTC daily) for /api/cron/snapshot
 	// Schedule: 0 1 * * * (1am UTC daily) for /api/cron/cleanup
+	// Schedule: 0 * * * * (hourly) for /api/cron/template-lifecycle
 
 	// Secrets (set via: wrangler secret put <SECRET_NAME>)
 	// - AIRTABLE_API_KEY

@@ -4,9 +4,8 @@
 		computeTemplateHealth,
 		type TemplateHealthTone
 	} from '$lib/utils/template-health';
-	import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from './ui';
+	import { Card, CardContent, CardHeader, CardTitle, Badge } from './ui';
 	import { formatCompactCurrency, formatLongDate, formatWholeNumber } from '$lib/utils/format';
-	import { trackEvent } from '$lib/utils/analytics';
 	import {
 		Activity,
 		AlertTriangle,
@@ -24,26 +23,21 @@
 		onLifecycleApplied?: (asset: Asset) => void;
 	}
 
-	let { asset, onLifecycleApplied }: Props = $props();
-	let isApplyingLifecycle = $state(false);
-	let lifecycleMessage = $state('');
-	let lifecycleError = $state('');
+	let { asset }: Props = $props();
 
 	const health = $derived(computeTemplateHealth(asset));
-	const lifecycleAction = $derived(
+	const lifecycleAutomationNote = $derived(
 		health.automation.code === 'move_detail_only'
 			? {
-					action: 'move_detail_only' as const,
-					label: 'Move detail-only',
+					label: 'Automatic detail-only move',
 					description:
-						'Apply the search visibility change now. Direct access remains available while search sync removes this template from discovery.'
+						'If the recovery window closes without the re-entry threshold, marketplace automation moves this template detail-only. Direct links and existing buyer access stay intact.'
 				}
 			: health.automation.code === 'eligible_for_reentry'
 				? {
-						action: 'request_search_reentry' as const,
-						label: 'Request re-entry review',
+						label: 'Automatic search return',
 						description:
-							'Send this template into marketplace review while keeping it detail-only until search restoration is approved.'
+							'This template met the re-entry threshold. Marketplace automation restores search visibility when the lifecycle job runs.'
 					}
 				: null
 	);
@@ -89,83 +83,6 @@
 		if (days === 0) return 'today';
 		if (days === 1) return '1 day';
 		return `${days} days`;
-	}
-
-	async function applyLifecycleAction(): Promise<void> {
-		if (!lifecycleAction || isApplyingLifecycle) return;
-		isApplyingLifecycle = true;
-		lifecycleMessage = '';
-		lifecycleError = '';
-		const requestedAction = lifecycleAction.action;
-
-		trackEvent('template_lifecycle_action_started', {
-			asset_id: asset.id,
-			action: requestedAction,
-			automation_code: health.automation.code,
-			automation_confidence: health.automation.confidence,
-			search_visibility: asset.searchVisibility || null,
-			search_visibility_target: health.automation.searchVisibilityTarget || null,
-			qualified_sales_30d: health.qualifiedSales30d,
-			reentry_sales_threshold: health.reentrySalesThreshold,
-			recovery_offer_used: health.recoveryOfferUsed,
-			has_active_offer: health.offer.hasOffer,
-			offer_state: health.offer.state,
-			offer_strategy: health.offer.strategy || null,
-			post_offer_action: health.offer.postOfferAction || null
-		});
-
-		try {
-			const response = await fetch(`/api/assets/${asset.id}/lifecycle`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					action: lifecycleAction.action,
-					confirm: true
-				})
-			});
-			const result = (await response.json()) as {
-				asset?: Asset;
-				lifecycle?: { message?: string };
-				message?: string;
-			};
-
-			if (!response.ok) {
-				throw new Error(result.message || 'Failed to update template lifecycle');
-			}
-			if (!result.asset) {
-				throw new Error('Template lifecycle response did not include the updated asset');
-			}
-
-			lifecycleMessage = result.lifecycle?.message || 'Template lifecycle updated.';
-			onLifecycleApplied?.(result.asset);
-			trackEvent('template_lifecycle_action_applied', {
-				asset_id: asset.id,
-				action: requestedAction,
-				automation_code: health.automation.code,
-				search_visibility_before: asset.searchVisibility || null,
-				search_visibility_after: result.asset.searchVisibility || null,
-				qualified_sales_30d: health.qualifiedSales30d,
-				reentry_sales_threshold: health.reentrySalesThreshold,
-				recovery_offer_used: health.recoveryOfferUsed,
-				has_active_offer: health.offer.hasOffer,
-				offer_state: health.offer.state
-			});
-		} catch (err) {
-			lifecycleError = err instanceof Error ? err.message : 'Failed to update template lifecycle';
-			trackEvent('template_lifecycle_action_failed', {
-				asset_id: asset.id,
-				action: requestedAction,
-				automation_code: health.automation.code,
-				search_visibility: asset.searchVisibility || null,
-				qualified_sales_30d: health.qualifiedSales30d,
-				reentry_sales_threshold: health.reentrySalesThreshold,
-				recovery_offer_used: health.recoveryOfferUsed,
-				has_active_offer: health.offer.hasOffer,
-				offer_state: health.offer.state
-			});
-		} finally {
-			isApplyingLifecycle = false;
-		}
 	}
 
 	const StatusIcon = $derived(statusIcon(health.tone));
@@ -240,31 +157,16 @@
 					{#if health.automation.recommendedPostOfferAction}
 						<span>{health.automation.recommendedPostOfferAction}</span>
 					{/if}
-				</div>
-				{#if lifecycleAction}
-					<div class="lifecycle-action">
-						<div>
-							<span class="metric-label">Governed execution</span>
-							<p>{lifecycleAction.description}</p>
-						</div>
-						<Button
-							size="sm"
-							variant={lifecycleAction.action === 'request_search_reentry' ? 'outline' : 'default'}
-							onclick={applyLifecycleAction}
-							disabled={isApplyingLifecycle}
-						>
-							<CheckCircle2 size={14} />
-							{isApplyingLifecycle ? 'Applying...' : lifecycleAction.label}
-						</Button>
 					</div>
-				{/if}
-				{#if lifecycleMessage}
-					<p class="lifecycle-status" data-tone="positive" aria-live="polite">{lifecycleMessage}</p>
-				{/if}
-				{#if lifecycleError}
-					<p class="lifecycle-status" data-tone="critical" role="alert">{lifecycleError}</p>
-				{/if}
-			</div>
+					{#if lifecycleAutomationNote}
+						<div class="lifecycle-action">
+							<div>
+								<span class="metric-label">{lifecycleAutomationNote.label}</span>
+								<p>{lifecycleAutomationNote.description}</p>
+							</div>
+						</div>
+					{/if}
+				</div>
 		</CardContent>
 	</Card>
 
@@ -533,29 +435,6 @@
 		display: grid;
 		gap: 0.2rem;
 		min-width: 0;
-	}
-
-	.lifecycle-action :global(button) {
-		flex: 0 0 auto;
-	}
-
-	.lifecycle-status {
-		padding: 0.55rem 0.65rem;
-		border: 1px solid color-mix(in srgb, var(--color-border-default) 72%, transparent);
-		border-radius: var(--radius-sm);
-		background: var(--color-bg-default);
-	}
-
-	.lifecycle-status[data-tone='positive'] {
-		color: var(--color-success-ink);
-		border-color: color-mix(in srgb, var(--color-success-border) 70%, var(--color-border-default));
-		background: color-mix(in srgb, var(--color-success-muted) 20%, var(--color-bg-default));
-	}
-
-	.lifecycle-status[data-tone='critical'] {
-		color: var(--color-error-ink);
-		border-color: color-mix(in srgb, var(--color-error-border) 70%, var(--color-border-default));
-		background: color-mix(in srgb, var(--color-error-muted) 20%, var(--color-bg-default));
 	}
 
 	.metric {

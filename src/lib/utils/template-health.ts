@@ -209,9 +209,9 @@ function lifecycleAutomationSignal(input: {
 				code: 'eligible_for_reentry',
 				label: 'Eligible for search re-entry',
 				summary:
-					'This detail-only template has reached the 4 qualified sales in 30 days threshold. Review quality, then restore marketplace search if the listing is current.',
+					'This detail-only template has reached the 4 qualified sales in 30 days threshold. Marketplace automation can restore search if the listing is current.',
 				confidence: 'high',
-				searchVisibilityTarget: 'Searchable after review',
+				searchVisibilityTarget: 'Searchable after threshold',
 				signals
 			};
 		}
@@ -263,6 +263,7 @@ function lifecycleAutomationSignal(input: {
 		input.hasEnoughViewers &&
 		!input.offer.hasOffer &&
 		input.recoveryOfferUsed &&
+		!hasReachedRecoveryReentryThreshold(input.qualifiedSales30d) &&
 		(input.status === 'needs_attention' ||
 			input.purchases === 0 ||
 			(input.conversionRate !== null && input.conversionRate < WATCH_CONVERSION_RATE))
@@ -563,7 +564,7 @@ export function computeTemplateHealth(asset: Asset, now = new Date()): TemplateH
 				addActionOnce(actions, {
 					title: 'Review for search re-entry',
 					description:
-						'This detail-only template has reached 4 qualified sales in 30 days. Confirm quality before restoring search visibility.',
+						'This detail-only template has reached 4 qualified sales in 30 days. Marketplace automation can restore search visibility.',
 					priority: 'high'
 				});
 			}

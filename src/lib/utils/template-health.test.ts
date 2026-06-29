@@ -249,7 +249,7 @@ describe('computeTemplateHealth', () => {
 
 		expect(health.automation).toMatchObject({
 			code: 'eligible_for_reentry',
-			searchVisibilityTarget: 'Searchable after review'
+			searchVisibilityTarget: 'Searchable after threshold'
 		});
 		expect(health.signals).toContainEqual(
 			expect.objectContaining({

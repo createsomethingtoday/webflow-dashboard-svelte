@@ -1546,6 +1546,34 @@ export function getAirtableClient(env: AirtableEnv | undefined) {
 		},
 
 		/**
+		 * Get published templates with lifecycle state that may need automatic offer
+		 * mirror sync, detail-only pruning, or marketplace search restoration.
+		 */
+		async getTemplateAssetsForLifecycleAutomation(): Promise<Asset[]> {
+			const formula = `AND({🆎Type} = 'Template🏗️', {🚀Marketplace Status} = '3️⃣Published🚀', OR({🎟️Template Offers}, {✅Recovery Offer Used (🏗️ only)}, {👁️Search Visibility (🏗️ only)}))`;
+
+			const records = await base(TABLES.ASSETS)
+				.select({
+					view: VIEWS.ASSETS,
+					filterByFormula: formula
+				})
+				.all();
+
+			return records.flatMap((record) => {
+				try {
+					return [mapAssetRecord(record)];
+				} catch (error) {
+					console.error('[Airtable] Failed to map template lifecycle automation asset', {
+						recordId: record.id,
+						marketplaceStatus: record.fields['🚀Marketplace Status'],
+						error: error instanceof Error ? error.message : String(error)
+					});
+					return [];
+				}
+			});
+		},
+
+		/**
 		 * Get single asset by ID.
 		 */
 		async getAsset(id: string): Promise<Asset | null> {
