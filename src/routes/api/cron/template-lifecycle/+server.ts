@@ -18,15 +18,24 @@ import { isAuthorizedCronRequest } from '$lib/server/security';
 import { runTemplateLifecycleAutomation } from '$lib/server/template-lifecycle-automation';
 
 export const GET: RequestHandler = async ({ request, platform }) => {
-	if (!isAuthorizedCronRequest(request, platform?.env?.CRON_SECRET, platform?.env?.ENVIRONMENT)) {
+	const env = platform?.env;
+	const isAuthorized =
+		isAuthorizedCronRequest(request, env?.CRON_SECRET, env?.ENVIRONMENT) ||
+		isAuthorizedCronRequest(
+			request,
+			env?.TEMPLATE_LIFECYCLE_CRON_SECRET,
+			env?.ENVIRONMENT
+		);
+
+	if (!isAuthorized) {
 		throw error(401, 'Unauthorized');
 	}
 
-	if (!platform?.env) {
+	if (!env) {
 		throw error(500, 'Platform environment not available');
 	}
 
-	const airtable = getAirtableClient(platform.env);
+	const airtable = getAirtableClient(env);
 	const result = await runTemplateLifecycleAutomation(airtable);
 
 	if (!result.success) {

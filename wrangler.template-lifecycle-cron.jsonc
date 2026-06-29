@@ -1,0 +1,15 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "webflow-dashboard-template-lifecycle-cron",
+	"main": "workers/template-lifecycle-cron.ts",
+	"compatibility_date": "2026-06-29",
+	"triggers": {
+		"crons": ["0 * * * *"]
+	},
+	"vars": {
+		"TEMPLATE_LIFECYCLE_CRON_URL": "https://webflowassets.createsomething.io/api/cron/template-lifecycle"
+	}
+
+	// Secret required:
+	// - TEMPLATE_LIFECYCLE_CRON_SECRET
+}
