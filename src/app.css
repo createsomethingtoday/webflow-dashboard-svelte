@@ -1,0 +1,352 @@
+/* Canon Design Tokens */
+@import '@create-something/canon/styles/tokens.css';
+
+@font-face {
+  font-family: 'WF Visual Sans';
+  src:
+    url('/fonts/WFVisualSans-RegularText.woff') format('woff'),
+    url('/fonts/WFVisualSans-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'WF Visual Sans';
+  src: url('/fonts/WFVisualSans-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'WF Visual Sans';
+  src:
+    url('/fonts/WFVisualSans-SemiBoldText.woff') format('woff'),
+    url('/fonts/WFVisualSans-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --font-sans: 'WF Visual Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'WF Visual Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --color-bg-pure: #ffffff;
+  --color-bg-elevated: #f7f7f7;
+  --color-bg-surface: #ffffff;
+  --color-bg-subtle: #f5f5f5;
+
+  --color-fg-primary: #080808;
+  --color-fg-secondary: #171717;
+  --color-fg-tertiary: #5a5a5a;
+  --color-fg-muted: #757575;
+  --color-fg-subtle: #ababab;
+
+  --color-border-default: #e3e3e3;
+  --color-border-emphasis: #d0d0d0;
+  --color-border-strong: #5a5a5a;
+
+  --color-shell-surface: rgba(255, 255, 255, 0.98);
+  --color-shell-surface-secondary: #ffffff;
+  --color-shell-surface-tertiary: #f5f5f5;
+  --color-shell-surface-elevated: #ffffff;
+  --color-shell-surface-hover: #f5f5f5;
+  --color-shell-border-subtle: rgba(227, 227, 227, 0.72);
+  --color-shell-border-default: #e3e3e3;
+  --color-shell-border-strong: #cfcfcf;
+  --color-shell-shadow: 0 1px 2px rgba(8, 8, 8, 0.03);
+  --color-shell-shadow-strong: 0 6px 18px rgba(8, 8, 8, 0.05);
+
+  --color-success: #00d722;
+  --color-success-ink: #0a7a23;
+  --color-success-muted: rgba(0, 215, 34, 0.12);
+  --color-success-border: rgba(0, 215, 34, 0.3);
+  --color-error: #ee1d36;
+  --color-error-ink: #b42318;
+  --color-error-muted: rgba(238, 29, 54, 0.12);
+  --color-error-border: rgba(238, 29, 54, 0.28);
+  --color-warning: #ffae13;
+  --color-warning-ink: #9a5b00;
+  --color-warning-muted: rgba(255, 174, 19, 0.14);
+  --color-warning-border: rgba(255, 174, 19, 0.3);
+  --color-info: #146ef5;
+  --color-info-ink: #0f4db8;
+  --color-info-muted: #cee2ff;
+  --color-info-border: #9dc4ff;
+  --color-info-soft-bg: #eef4ff;
+  --color-info-soft-border: #bfd3f6;
+  --color-info-soft-text: #18448c;
+  --color-info-soft-wash: rgba(20, 110, 245, 0.08);
+
+  --color-hover: #f5f5f5;
+  --color-active: #eef4ff;
+  --color-focus: #3b89ff;
+
+  --color-overlay: rgba(8, 8, 8, 0.4);
+  --color-overlay-heavy: rgba(8, 8, 8, 0.6);
+
+  --glass-bg-subtle: rgba(255, 255, 255, 0.96);
+  --glass-bg-light: rgba(255, 255, 255, 0.98);
+  --glass-bg-medium: rgba(255, 255, 255, 0.99);
+  --glass-bg-strong: #ffffff;
+  --glass-border-subtle: rgba(8, 8, 8, 0.08);
+  --glass-border-light: rgba(8, 8, 8, 0.08);
+  --glass-border-medium: rgba(8, 8, 8, 0.14);
+  --glass-border-strong: rgba(8, 8, 8, 0.22);
+  --glass-shadow-sm: 0 1px 2px rgba(8, 8, 8, 0.03);
+  --glass-shadow-md: 0 8px 18px rgba(8, 8, 8, 0.05);
+  --glass-shadow-lg: 0 18px 36px rgba(8, 8, 8, 0.1);
+
+  --color-data-1: #146ef5;
+  --color-data-1-muted: rgba(20, 110, 245, 0.16);
+  --color-data-2: #00d722;
+  --color-data-2-muted: rgba(0, 215, 34, 0.16);
+  --color-data-3: #7a3dff;
+  --color-data-3-ink: #5d29c8;
+  --color-data-3-muted: rgba(122, 61, 255, 0.14);
+  --color-data-3-border: rgba(122, 61, 255, 0.26);
+  --color-data-4: #ff6b00;
+  --color-data-4-muted: rgba(255, 107, 0, 0.16);
+  --color-data-5: #ed52cb;
+  --color-data-5-muted: rgba(237, 82, 203, 0.16);
+  --color-data-6: #ffae13;
+  --color-data-6-muted: rgba(255, 174, 19, 0.16);
+
+  --shadow-sm: 0 1px 2px rgba(8, 8, 8, 0.03);
+  --shadow-md: 0 8px 18px rgba(8, 8, 8, 0.05);
+  --shadow-lg: 0 16px 32px rgba(8, 8, 8, 0.08);
+
+  --layout-content-max-width: 81rem;
+  --layout-header-max-width: 83rem;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg-pure: #080808;
+  --color-bg-elevated: #171717;
+  --color-bg-surface: #171717;
+  --color-bg-subtle: #222222;
+
+  --color-fg-primary: #ffffff;
+  --color-fg-secondary: #f0f0f0;
+  --color-fg-tertiary: #d8d8d8;
+  --color-fg-muted: #ababab;
+  --color-fg-subtle: #757575;
+
+  --color-border-default: #363636;
+  --color-border-emphasis: #5a5a5a;
+  --color-border-strong: #ababab;
+
+  --color-shell-surface: rgba(8, 8, 8, 0.96);
+  --color-shell-surface-secondary: #171717;
+  --color-shell-surface-tertiary: #222222;
+  --color-shell-surface-elevated: #171717;
+  --color-shell-surface-hover: #222222;
+  --color-shell-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-shell-border-default: #363636;
+  --color-shell-border-strong: #5a5a5a;
+  --color-shell-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+  --color-shell-shadow-strong: 0 18px 40px rgba(0, 0, 0, 0.42);
+
+  --color-hover: rgba(255, 255, 255, 0.06);
+  --color-active: rgba(20, 110, 245, 0.22);
+  --color-focus: #6ca7ff;
+  --color-success-ink: #65f08a;
+  --color-error-ink: #ff8a80;
+  --color-warning-ink: #ffd27d;
+  --color-info-ink: #9dc4ff;
+  --color-data-3-ink: #c9adff;
+  --color-info-soft-bg: rgba(157, 196, 255, 0.12);
+  --color-info-soft-border: rgba(157, 196, 255, 0.4);
+  --color-info-soft-text: #dbe8ff;
+  --color-info-soft-wash: rgba(157, 196, 255, 0.08);
+
+  --glass-bg-subtle: rgba(23, 23, 23, 0.92);
+  --glass-bg-light: rgba(23, 23, 23, 0.95);
+  --glass-bg-medium: rgba(23, 23, 23, 0.97);
+  --glass-bg-strong: #171717;
+  --glass-border-subtle: rgba(255, 255, 255, 0.08);
+  --glass-border-light: rgba(255, 255, 255, 0.12);
+  --glass-border-medium: rgba(255, 255, 255, 0.16);
+  --glass-border-strong: rgba(255, 255, 255, 0.22);
+}
+
+/* Base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-bg-pure);
+  transition:
+    background-color var(--duration-standard) var(--ease-standard),
+    color var(--duration-standard) var(--ease-standard);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-bg-pure);
+  color: var(--color-fg-primary);
+  line-height: var(--leading-normal);
+  transition:
+    background-color var(--duration-standard) var(--ease-standard),
+    color var(--duration-standard) var(--ease-standard);
+}
+
+[data-theme='dark'] body {
+  background: var(--color-bg-pure);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  letter-spacing: 0.01em;
+}
+
+a {
+  color: var(--color-info);
+  text-decoration: none;
+  transition: color var(--duration-micro) var(--ease-standard);
+}
+
+a:hover {
+  color: color-mix(in srgb, var(--color-info) 82%, var(--color-fg-primary));
+}
+
+::selection {
+  background: var(--color-info);
+  color: #ffffff;
+}
+
+.page-intro {
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-shell-border-default);
+}
+
+.page-intro__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 2vw + 1rem, 2.5rem);
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.01em;
+  color: var(--color-fg-primary);
+  margin: 0 0 0.35rem;
+}
+
+.page-intro__subtitle {
+  font-size: var(--text-body-sm);
+  color: var(--color-fg-tertiary);
+  margin: 0;
+  max-width: 60ch;
+  line-height: 1.6;
+}
+
+.page-intro--dashboard .page-intro__title {
+  font-size: clamp(2rem, 2.1vw + 1rem, 2.7rem);
+  line-height: 1.08;
+  max-width: 16ch;
+}
+
+.page-intro--dashboard .page-intro__subtitle {
+  font-size: var(--text-body-sm);
+  line-height: 1.6;
+  max-width: 58ch;
+  color: var(--color-fg-tertiary);
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-focus) 28%, transparent);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Utility classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* =============================================================================
+   Form Input Base Styles
+   Shared styles for Input, Textarea, and similar form controls
+   ============================================================================= */
+
+.form-control {
+  display: flex;
+  width: 100%;
+  padding: 0.625rem 0.95rem;
+  font-size: var(--text-body-sm);
+  font-family: inherit;
+  color: var(--color-fg-primary);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-shell-border-default);
+  border-radius: var(--radius-lg);
+  outline: none;
+  box-shadow:
+    inset 0 1px 0 var(--glass-border-light),
+    var(--shadow-sm);
+  transition:
+    border-color var(--duration-micro) var(--ease-standard),
+    box-shadow var(--duration-micro) var(--ease-standard),
+    background-color var(--duration-micro) var(--ease-standard);
+}
+
+.form-control::placeholder {
+  color: var(--color-fg-muted);
+}
+
+.form-control:focus {
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 4px var(--color-info-muted);
+}
+
+.form-control:focus-visible {
+  outline: none;
+}
+
+.form-control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-control-error {
+  border-color: var(--color-error);
+}
+
+.form-control-error:focus {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 4px var(--color-error-muted);
+}

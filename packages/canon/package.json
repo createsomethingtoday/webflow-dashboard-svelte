@@ -1,0 +1,19 @@
+{
+  "name": "@create-something/canon",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    "./auth": {
+      "types": "./auth/index.d.ts",
+      "default": "./auth/index.js"
+    },
+    "./styles/tokens.css": "./styles/tokens.css"
+  },
+  "dependencies": {
+    "@sveltejs/kit": "^2.8.0"
+  }
+}

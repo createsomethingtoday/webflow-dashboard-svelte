@@ -1,0 +1,50 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "webflow-dashboard",
+	"compatibility_date": "2024-12-01",
+	"compatibility_flags": ["nodejs_compat"],
+	"pages_build_output_dir": ".svelte-kit/cloudflare",
+
+	// D1 Database for analytics history
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "webflow-dashboard-db",
+			"database_id": "da2ac945-5340-42ce-91eb-451aeaad5742"
+		}
+	],
+
+	// KV Namespaces
+	"kv_namespaces": [
+		{
+			"binding": "SESSIONS",
+			"id": "552d6f66fdf84e8aad55306e6971068e"
+		}
+	],
+
+	// R2 Buckets
+	"r2_buckets": [
+		{
+			"binding": "UPLOADS",
+			"bucket_name": "webflow-dashboard-uploads"
+		}
+	],
+
+	// Environment variables (secrets set via wrangler secret put)
+	"vars": {
+		"ENVIRONMENT": "production"
+	}
+
+	// Cron triggers: Configure in Cloudflare Dashboard > Workers & Pages > webflow-dashboard > Triggers
+	// Schedule: 0 0 * * * (midnight UTC daily) for /api/cron/snapshot
+	// Schedule: 0 1 * * * (1am UTC daily) for /api/cron/cleanup
+
+	// Secrets (set via: wrangler secret put <SECRET_NAME>)
+	// - AIRTABLE_API_KEY
+	// - AIRTABLE_BASE_ID
+	// - CRON_SECRET (required in production for /api/cron/* auth)
+	// - TEMPLATE_OFFER_DIAGNOSTIC_TOKEN (required for /api/admin/template-offer-requests/reproduce bearer auth)
+	// Optional vars/secrets:
+	// - ADMIN_EMAILS (comma-separated allowlist for admin-only API reads)
+	// - CSRF_TRUSTED_ORIGINS (comma-separated extra trusted origins for cookie-authenticated API mutations)
+}

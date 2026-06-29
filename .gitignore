@@ -1,0 +1,11 @@
+node_modules/
+.svelte-kit/
+.vercel/
+.wrangler/
+dist/
+build/
+.DS_Store
+.env
+.env.*
+!.env.example
+coverage/
