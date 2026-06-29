@@ -4,7 +4,10 @@ import type {
 	TemplateOfferRequestInput,
 	TemplateOfferStrategy
 } from './airtable';
-import { isRecoveryOfferStrategy } from '../utils/template-lifecycle-policy';
+import {
+	isRecoveryOfferStrategy,
+	minimumTemplateOfferPrice
+} from '../utils/template-lifecycle-policy';
 
 export interface TemplateOfferRequestBody {
 	offerLabel?: unknown;
@@ -39,8 +42,6 @@ const POST_OFFER_ACTIONS = new Set<TemplateOfferPostOfferAction>([
 	'Delist / archive after expiry'
 ]);
 
-const MIN_PAID_OFFER_PRICE = 19;
-const MIN_MARKETPLACE_PRICE_RATIO = 0.35;
 const MIN_OFFER_DURATION_HOURS = 24;
 const MAX_OFFER_DURATION_DAYS = 30;
 
@@ -107,8 +108,7 @@ function parseOfferPrice(value: unknown, policy: TemplateOfferPolicyContext): nu
 			throw error(400, 'Offer price cannot exceed the marketplace price');
 		}
 
-		const ratioFloor = Number((marketplacePrice * MIN_MARKETPLACE_PRICE_RATIO).toFixed(2));
-		const minimumPrice = Math.min(marketplacePrice, Math.max(MIN_PAID_OFFER_PRICE, ratioFloor));
+		const minimumPrice = minimumTemplateOfferPrice(marketplacePrice);
 		if (normalizedPrice < minimumPrice) {
 			throw error(400, `Offer price must be at least $${minimumPrice.toFixed(2)}`);
 		}
@@ -116,8 +116,9 @@ function parseOfferPrice(value: unknown, policy: TemplateOfferPolicyContext): nu
 		return normalizedPrice;
 	}
 
-	if (normalizedPrice < MIN_PAID_OFFER_PRICE) {
-		throw error(400, `Offer price must be at least $${MIN_PAID_OFFER_PRICE}`);
+	const minimumPrice = minimumTemplateOfferPrice();
+	if (normalizedPrice < minimumPrice) {
+		throw error(400, `Offer price must be at least $${minimumPrice}`);
 	}
 
 	return normalizedPrice;

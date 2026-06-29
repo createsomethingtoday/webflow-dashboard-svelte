@@ -5,7 +5,8 @@
 	import { computeTemplateHealth } from '$lib/utils/template-health';
 	import {
 		RECOVERY_REENTRY_QUALIFIED_SALES_30D,
-		isRecoveryOfferStrategy
+		isRecoveryOfferStrategy,
+		minimumTemplateOfferPrice
 	} from '$lib/utils/template-lifecycle-policy';
 	import { toast } from '$lib/stores/toast';
 	import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input, Label, Textarea } from './ui';
@@ -27,6 +28,43 @@
 		| 'Move to detail-only after expiry'
 		| 'Delist / archive after expiry';
 
+	const OFFER_STRATEGIES = new Set<OfferStrategy>([
+		'Limited-time sale',
+		'Creator-managed price test',
+		'Prune recovery test',
+		'Exit sale before delist',
+		'Retention save'
+	]);
+
+	function isSupportedOfferStrategy(value?: string | null): value is OfferStrategy {
+		return Boolean(value && OFFER_STRATEGIES.has(value as OfferStrategy));
+	}
+
+	function offerPricePlaceholder(minimumPrice: number): string {
+		return minimumPrice.toFixed(2).replace(/\.00$/, '');
+	}
+
+	function defaultOfferStrategy(asset: Asset): OfferStrategy {
+		const health = computeTemplateHealth(asset);
+		const recommended = health.automation.recommendedOfferStrategy;
+
+		if (
+			isSupportedOfferStrategy(recommended) &&
+			!(asset.recoveryOfferUsed && isRecoveryOfferStrategy(recommended))
+		) {
+			return recommended;
+		}
+
+		if (
+			isSupportedOfferStrategy(asset.activeOfferStrategy) &&
+			!(asset.recoveryOfferUsed && isRecoveryOfferStrategy(asset.activeOfferStrategy))
+		) {
+			return asset.activeOfferStrategy;
+		}
+
+		return 'Creator-managed price test';
+	}
+
 	let { asset }: Props = $props();
 
 	const defaultEndDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
@@ -47,9 +85,12 @@
 	let errorMessage = $state('');
 	let successMessage = $state('');
 	let didInitializeOfferLabel = $state(false);
+	let didInitializeOfferStrategy = $state(false);
 
 	const canRequestOffer = $derived(asset.type === 'Template' && asset.status === 'Published');
 	const health = $derived(computeTemplateHealth(asset));
+	const minimumOfferPrice = $derived(minimumTemplateOfferPrice(asset.priceAmount));
+	const minimumOfferPricePlaceholder = $derived(offerPricePlaceholder(minimumOfferPrice));
 	const hasActiveOffer = $derived(
 		Boolean(
 			asset.activeOfferLabel ||
@@ -77,6 +118,12 @@
 		if (didInitializeOfferLabel) return;
 		offerLabel = asset.activeOfferLabel || 'Limited offer';
 		didInitializeOfferLabel = true;
+	});
+
+	$effect(() => {
+		if (didInitializeOfferStrategy) return;
+		offerStrategy = defaultOfferStrategy(asset);
+		didInitializeOfferStrategy = true;
 	});
 
 	$effect(() => {
@@ -251,10 +298,10 @@
 							id="offerPrice"
 							bind:value={offerPrice}
 							type="number"
-							min="0"
+							min={minimumOfferPrice}
 							max="10000"
 							step="0.01"
-							placeholder="29"
+							placeholder={minimumOfferPricePlaceholder}
 							required
 							oninput={resetMessages}
 						/>
