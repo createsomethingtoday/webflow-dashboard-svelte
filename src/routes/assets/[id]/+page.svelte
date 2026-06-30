@@ -360,7 +360,7 @@
               {#if asset.qualifiedSales30d !== undefined || asset.recoveryOfferUsed}
                 <span
                   ><strong>{asset.qualifiedSales30d ?? 0}/{RECOVERY_REENTRY_QUALIFIED_SALES_30D}</strong>
-                  re-entry sales</span
+                  search return sales</span
                 >
               {/if}
               {#if hasActiveOffer}
@@ -549,7 +549,7 @@
                     {/if}
                     {#if asset.qualifiedSales30d !== undefined}
                       <div class="detail-item">
-                        <span class="detail-label">Qualified Sales (30d)</span>
+                        <span class="detail-label">Search Return Sales (30d)</span>
                         <span class="detail-value"
                           >{asset.qualifiedSales30d}/{RECOVERY_REENTRY_QUALIFIED_SALES_30D}</span
                         >

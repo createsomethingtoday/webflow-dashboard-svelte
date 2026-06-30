@@ -131,8 +131,10 @@
 					<span class="metric-value">{health.searchVisibilitySuppressed ? 'Detail only' : 'Searchable'}</span>
 				</div>
 				<div class="metric">
-					<span class="metric-label">Re-entry</span>
-					<span class="metric-value">{health.qualifiedSales30d ?? 0}/{health.reentrySalesThreshold}</span>
+					<span class="metric-label">Search return</span>
+					<span class="metric-value"
+						>{health.qualifiedSales30d ?? 0}/{health.reentrySalesThreshold} sales</span
+					>
 				</div>
 			</div>
 

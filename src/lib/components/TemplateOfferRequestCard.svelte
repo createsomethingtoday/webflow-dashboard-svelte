@@ -265,8 +265,9 @@
 						{/if}
 						{#if asset.qualifiedSales30d !== undefined || asset.recoveryOfferUsed}
 							<span>
-								Re-entry sales:
+								Search return:
 								<strong>{asset.qualifiedSales30d ?? 0}/{RECOVERY_REENTRY_QUALIFIED_SALES_30D}</strong>
+								qualified template sales
 							</span>
 						{/if}
 						{#if asset.recoveryOfferUsed}
@@ -320,6 +321,10 @@
 								oninput={resetMessages}
 							/>
 						</div>
+						<p class="field-hint">
+							This offer affects Asset Dashboard template health and marketplace search visibility.
+							Partner Hub attribution is managed separately by Webflow.
+						</p>
 					</div>
 
 					<div class="form-field">
@@ -405,7 +410,8 @@
 				{#if isRecoveryBlocked}
 					<p class="form-message form-message--error">
 						Recovery offers are one-time. This template needs
-						{RECOVERY_REENTRY_QUALIFIED_SALES_30D} qualified sales in 30 days before search re-entry.
+						{RECOVERY_REENTRY_QUALIFIED_SALES_30D} qualified template sales in 30 days before it
+						can return to marketplace search.
 					</p>
 				{/if}
 
@@ -499,6 +505,13 @@
 
 	.form-field {
 		min-width: 0;
+	}
+
+	.field-hint {
+		margin: var(--space-xs) 0 0;
+		color: var(--color-fg-muted);
+		font-size: var(--text-caption);
+		line-height: 1.45;
 	}
 
 	.form-field--wide {

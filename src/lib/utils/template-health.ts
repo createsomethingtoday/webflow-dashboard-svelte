@@ -686,10 +686,11 @@ export function computeTemplateHealth(asset: Asset, now = new Date()): TemplateH
 				: 'This template is eligible for marketplace search discovery.'
 		},
 		{
-			label: 'Re-entry signal',
-			value: `${qualifiedSales30d ?? 0}/${RECOVERY_REENTRY_QUALIFIED_SALES_30D} sales`,
+			label: 'Search return progress',
+			value: `${qualifiedSales30d ?? 0}/${RECOVERY_REENTRY_QUALIFIED_SALES_30D} qualified template sales`,
 			tone: hasReachedRecoveryReentryThreshold(qualifiedSales30d) ? 'positive' : searchVisibilitySuppressed ? 'warning' : 'neutral',
-			description: 'Detail-only templates need 4 qualified sales in 30 days before marketplace search re-entry.'
+			description:
+				'Detail-only templates return to marketplace search after 4 qualified template sales in 30 days, assuming no quality or policy issues.'
 		}
 	];
 

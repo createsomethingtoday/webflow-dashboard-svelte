@@ -253,8 +253,8 @@ describe('computeTemplateHealth', () => {
 		});
 		expect(health.signals).toContainEqual(
 			expect.objectContaining({
-				label: 'Re-entry signal',
-				value: '4/4 sales',
+				label: 'Search return progress',
+				value: '4/4 qualified template sales',
 				tone: 'positive'
 			})
 		);
